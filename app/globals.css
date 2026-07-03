@@ -71,14 +71,6 @@ h1 {
   letter-spacing: -0.04em;
 }
 
-.subtitle {
-  max-width: 650px;
-  margin: 16px 0 0;
-  color: var(--muted);
-  font-size: 17px;
-  line-height: 1.6;
-}
-
 .wiki-link {
   display: inline-flex;
   flex: 0 0 auto;
@@ -317,15 +309,6 @@ h1 {
   background: var(--surface-raised);
 }
 
-footer {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 26px 0 0;
-  color: #666f7c;
-  font-size: 12px;
-}
-
 @media (max-width: 850px) {
   .page-shell {
     padding-top: 46px;
@@ -347,10 +330,6 @@ footer {
   .page-header {
     display: block;
     margin-bottom: 26px;
-  }
-
-  .subtitle {
-    font-size: 15px;
   }
 
   .wiki-link {
@@ -379,15 +358,6 @@ footer {
     border-radius: 2px;
   }
 
-  footer {
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .footer-separator {
-    display: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -67,7 +67,6 @@ function ServiceRow({ service }: { service: PublicServiceStatus }) {
             <span className="state-dot" aria-hidden="true" />
             {copy.label}
           </span>
-          <span>{service.latencyMs === null ? "—" : `${service.latencyMs} мс`}</span>
           <time dateTime={service.lastCheckedAt ?? undefined}>
             {formatCheckTime(service.lastCheckedAt)}
           </time>
@@ -141,9 +140,6 @@ export function StatusDashboard({
         <div>
           <p className="eyebrow">Melonis Wiki</p>
           <h1>Состояние сервисов</h1>
-          <p className="subtitle">
-            Доступность сайта, публичных API и базы данных за последние 24 часа.
-          </p>
         </div>
         <a href="https://melonis.wiki" className="wiki-link">
           Открыть вики
@@ -184,11 +180,6 @@ export function StatusDashboard({
         </section>
       )}
 
-      <footer>
-        <span>Автоматическая проверка каждую минуту</span>
-        <span className="footer-separator" aria-hidden="true">•</span>
-        <span>История за 24 часа</span>
-      </footer>
     </main>
   );
 }
