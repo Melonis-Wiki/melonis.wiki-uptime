@@ -42,14 +42,6 @@ function formatPercent(value: number | null): string {
   }).format(value)}%`;
 }
 
-function formatCheckTime(value: string | null): string {
-  if (!value) return "Проверок ещё не было";
-  return `Проверено ${new Intl.DateTimeFormat("ru-RU", {
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(value))}`;
-}
-
 function ServiceRow({ service }: { service: PublicServiceStatus }) {
   const copy = STATE_COPY[service.state];
   return (
@@ -66,9 +58,6 @@ function ServiceRow({ service }: { service: PublicServiceStatus }) {
             <span className="state-dot" aria-hidden="true" />
             {copy.label}
           </span>
-          <time dateTime={service.lastCheckedAt ?? undefined}>
-            {formatCheckTime(service.lastCheckedAt)}
-          </time>
         </div>
       </div>
 
