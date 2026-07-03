@@ -137,7 +137,7 @@ export function StatusDashboard({
     <main className="page-shell">
       <header className="page-header">
         <div>
-          <p className="eyebrow">Melonis Wiki</p>
+          <p className="eyebrow">melonis.wiki</p>
           <h1>Состояние сервисов</h1>
         </div>
         <a href="https://melonis.wiki" className="wiki-link">
