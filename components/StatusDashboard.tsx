@@ -47,7 +47,6 @@ function formatCheckTime(value: string | null): string {
   return `Проверено ${new Intl.DateTimeFormat("ru-RU", {
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
   }).format(new Date(value))}`;
 }
 
