@@ -1,6 +1,6 @@
-import { getRedisClient } from "@/lib/redis";
-import { RedisMonitorStore } from "@/lib/store";
-import type { PublicStatus } from "@/lib/types";
+import { getRedisClient } from "./redis.js";
+import { RedisMonitorStore } from "./store.js";
+import type { PublicStatus } from "./types.js";
 
 export async function getStatusSnapshot(now = Date.now()): Promise<PublicStatus> {
   const client = await getRedisClient();

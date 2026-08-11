@@ -1,5 +1,4 @@
-import type { createClient } from "redis";
-
+import type { UptimeRedisClient } from "./redis.js";
 import {
   aggregateSamples,
   CHECK_INTERVAL_MS,
@@ -7,7 +6,7 @@ import {
   toStoredSample,
   transitionState,
   worstState,
-} from "@/lib/state";
+} from "./state.js";
 import {
   SERVICE_IDS,
   SERVICE_NAMES,
@@ -17,9 +16,9 @@ import {
   type PublicStatus,
   type ServiceId,
   type StoredSample,
-} from "@/lib/types";
+} from "./types.js";
 
-type RedisClient = ReturnType<typeof createClient>;
+type RedisClient = UptimeRedisClient;
 
 function parseJson<T>(raw: string | undefined | null): T | null {
   if (!raw) return null;

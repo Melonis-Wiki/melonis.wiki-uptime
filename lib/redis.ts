@@ -1,13 +1,15 @@
-import { createClient } from "redis";
+import { createClient, type RedisClientType } from "redis";
 
-let clientPromise: Promise<ReturnType<typeof createClient>> | null = null;
+export type UptimeRedisClient = RedisClientType;
 
-export async function getRedisClient(): Promise<ReturnType<typeof createClient>> {
+let clientPromise: Promise<UptimeRedisClient> | null = null;
+
+export async function getRedisClient(): Promise<UptimeRedisClient> {
   const url = process.env.REDIS_URL?.trim();
   if (!url) throw new Error("REDIS_URL is not configured");
 
   if (!clientPromise) {
-    const client = createClient({
+    const client: UptimeRedisClient = createClient({
       url,
       socket: {
         connectTimeout: 5_000,
@@ -19,10 +21,13 @@ export async function getRedisClient(): Promise<ReturnType<typeof createClient>>
         message: error instanceof Error ? error.message : String(error),
       });
     });
-    clientPromise = client.connect().then(() => client).catch((error) => {
-      clientPromise = null;
-      throw error;
-    });
+    clientPromise = client
+      .connect()
+      .then(() => client)
+      .catch((error: unknown) => {
+        clientPromise = null;
+        throw error;
+      });
   }
 
   const client = await clientPromise;

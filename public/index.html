@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Текущее состояние сайта и API Melonis Wiki.">
+    <title>Состояние Melonis Wiki</title>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/status.js" defer></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">melonis.wiki</p>
+          <h1>Состояние сервисов</h1>
+        </div>
+        <a href="https://melonis.wiki" class="wiki-link">
+          Открыть вики <span aria-hidden="true">↗</span>
+        </a>
+      </header>
+      <section id="overall" class="overall-card state-unknown" aria-live="polite"></section>
+      <section id="services" class="services-card empty-state"></section>
+    </main>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise";
 
-import type { ProbeErrorCode, ProbeResult, ServiceId } from "@/lib/types";
+import type { ProbeErrorCode, ProbeResult, ServiceId } from "./types.js";
 
 export const TARGET_ORIGIN = "https://melonis.wiki";
 export const PROBE_TIMEOUT_MS = 10_000;

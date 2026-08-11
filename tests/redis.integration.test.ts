@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createClient } from "redis";
 
+import type { UptimeRedisClient } from "@/lib/redis";
 import { RETENTION_MS } from "@/lib/state";
 import { RedisMonitorStore } from "@/lib/store";
 
@@ -11,7 +12,7 @@ test(
   "Redis store locks each minute, persists state, and prunes old samples",
   { skip: !redisUrl },
   async () => {
-    const client = createClient({ url: redisUrl });
+    const client: UptimeRedisClient = createClient({ url: redisUrl });
     await client.connect();
     const prefix = `melonis:uptime:test:${process.pid}:${Date.now()}`;
     const store = new RedisMonitorStore(client, prefix);

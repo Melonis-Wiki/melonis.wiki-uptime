@@ -4,7 +4,7 @@ import type {
   ServiceState,
   StatusBucket,
   StoredSample,
-} from "@/lib/types";
+} from "./types.js";
 
 export const CHECK_INTERVAL_MS = 60_000;
 export const HISTORY_WINDOW_MS = 24 * 60 * 60_000;

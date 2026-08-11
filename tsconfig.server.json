@@ -1,7 +1,22 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "paths": { "@/*": ["./*"] }
+    "allowJs": false,
+    "incremental": false,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": false,
+    "outDir": "dist",
+    "rootDir": "."
   },
-  "include": ["server.ts", "lib/**/*.ts", "tests/**/*.ts"]
+  "include": [
+    "server.ts",
+    "lib/probes.ts",
+    "lib/redis.ts",
+    "lib/scheduler.ts",
+    "lib/state.ts",
+    "lib/status.ts",
+    "lib/store.ts",
+    "lib/types.ts"
+  ]
 }

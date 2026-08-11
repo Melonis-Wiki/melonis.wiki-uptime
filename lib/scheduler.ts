@@ -1,7 +1,7 @@
-import { CHECK_INTERVAL_MS } from "@/lib/state";
-import { runAllProbes } from "@/lib/probes";
-import { getRedisClient } from "@/lib/redis";
-import { RedisMonitorStore } from "@/lib/store";
+import { runAllProbes } from "./probes.js";
+import { getRedisClient } from "./redis.js";
+import { CHECK_INTERVAL_MS } from "./state.js";
+import { RedisMonitorStore } from "./store.js";
 
 let stopScheduler: (() => void) | null = null;
 

@@ -7,8 +7,8 @@
   },
   "scripts": {
     "dev": "TSX_TSCONFIG_PATH=./tsconfig.server.json tsx server.ts",
-    "build": "next build --webpack",
-    "start": "NODE_ENV=production TSX_TSCONFIG_PATH=./tsconfig.server.json tsx server.ts",
+    "build": "tsc -p tsconfig.server.json",
+    "start": "NODE_ENV=production node dist/server.js",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "TSX_TSCONFIG_PATH=./tsconfig.server.json node --import tsx --test tests/*.test.ts",
@@ -16,19 +16,19 @@
     "test:all": "npm run lint && npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
-    "mysql2": "^3.14.0",
-    "next": "16.2.9",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "redis": "^5.0.0"
+    "mysql2": "^3.23.2",
+    "redis": "^6.2.0"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^26",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.9",
-    "tsx": "^4.22.4",
-    "typescript": "^5"
+    "eslint-config-next": "16.3.0",
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "tsx": "^4.23.11",
+    "typescript": "^5.9.3"
   }
 }
