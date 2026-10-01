@@ -1,4 +1,4 @@
-export const SERVICE_IDS = ["website", "search", "fetch", "database"] as const;
+export const SERVICE_IDS = ["website", "search", "fetch", "database", "maps"] as const;
 
 export type ServiceId = (typeof SERVICE_IDS)[number];
 export type ServiceState = "up" | "degraded" | "down" | "unknown";
@@ -8,6 +8,7 @@ export const SERVICE_NAMES: Record<ServiceId, string> = {
   search: "Поиск",
   fetch: "Fetch API",
   database: "База данных",
+  maps: "Карты",
 };
 
 export type ProbeErrorCode =

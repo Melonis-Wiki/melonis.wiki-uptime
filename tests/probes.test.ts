@@ -10,12 +10,35 @@ import {
   validateWebsiteResponse,
 } from "@/lib/probes";
 
-test("target origin and probe paths are fixed to melonis.wiki", () => {
+test("HTTP probes target the production origins and paths", () => {
   assert.equal(TARGET_ORIGIN, "https://melonis.wiki");
   assert.deepEqual(
-    HTTP_PROBES.map((probe) => probe.path),
-    ["/", "/api/search?q=melonis", "/api/fetch?sections"],
+    HTTP_PROBES.map((probe) => `${probe.origin}${probe.path}`),
+    [
+      "https://melonis.wiki/",
+      "https://melonis.wiki/api/search?q=melonis",
+      "https://melonis.wiki/api/fetch?sections",
+      "https://maps.melonis.wiki/",
+    ],
   );
+});
+
+test("maps probe requests the production map site and validates its HTML", async () => {
+  const probe = HTTP_PROBES.find((definition) => definition.serviceId === "maps");
+  assert.ok(probe);
+  const mapsFetch: typeof fetch = async (input, init) => {
+    assert.equal(input, "https://maps.melonis.wiki/");
+    assert.equal(new Headers(init?.headers).get("Accept"), "text/html");
+    return new Response("<!doctype html><html><title>Melonis Maps — история спавна</title></html>");
+  };
+
+  const result = await runHttpProbe(probe, mapsFetch);
+  assert.equal(result.serviceId, "maps");
+  assert.equal(result.success, true);
+
+  const failedResult = await runHttpProbe(probe, async () => new Response("up"));
+  assert.equal(failedResult.success, false);
+  assert.equal(failedResult.errorCode, "unexpected_body");
 });
 
 test("website validator requires a successful Melonis HTML document", async () => {

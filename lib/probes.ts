@@ -3,10 +3,12 @@ import mysql from "mysql2/promise";
 import type { ProbeErrorCode, ProbeResult, ServiceId } from "./types.js";
 
 export const TARGET_ORIGIN = "https://melonis.wiki";
+export const MAPS_ORIGIN = "https://maps.melonis.wiki";
 export const PROBE_TIMEOUT_MS = 10_000;
 
 type HttpProbeDefinition = {
   serviceId: Exclude<ServiceId, "database">;
+  origin: string;
   path: string;
   accept: string;
   validate: (response: Response) => Promise<ProbeErrorCode | null>;
@@ -15,21 +17,31 @@ type HttpProbeDefinition = {
 export const HTTP_PROBES: readonly HttpProbeDefinition[] = [
   {
     serviceId: "website",
+    origin: TARGET_ORIGIN,
     path: "/",
     accept: "text/html",
     validate: validateWebsiteResponse,
   },
   {
     serviceId: "search",
+    origin: TARGET_ORIGIN,
     path: "/api/search?q=melonis",
     accept: "application/json",
     validate: validateSearchResponse,
   },
   {
     serviceId: "fetch",
+    origin: TARGET_ORIGIN,
     path: "/api/fetch?sections",
     accept: "application/json",
     validate: validateFetchResponse,
+  },
+  {
+    serviceId: "maps",
+    origin: MAPS_ORIGIN,
+    path: "/",
+    accept: "text/html",
+    validate: validateWebsiteResponse,
   },
 ] as const;
 
@@ -104,7 +116,7 @@ export async function runHttpProbe(
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const response = await fetchImpl(`${TARGET_ORIGIN}${definition.path}`, {
+    const response = await fetchImpl(`${definition.origin}${definition.path}`, {
       method: "GET",
       redirect: "follow",
       cache: "no-store",

@@ -28,6 +28,7 @@ test(
           { serviceId: "search", success: true, latencyMs: 20 },
           { serviceId: "fetch", success: true, latencyMs: 25 },
           { serviceId: "database", success: true, latencyMs: 5 },
+          { serviceId: "maps", success: true, latencyMs: 30 },
         ],
         now - RETENTION_MS - 1,
       );
@@ -37,15 +38,22 @@ test(
           { serviceId: "search", success: true, latencyMs: 20 },
           { serviceId: "fetch", success: true, latencyMs: 25 },
           { serviceId: "database", success: true, latencyMs: 5 },
+          { serviceId: "maps", success: true, latencyMs: 30 },
         ],
         now,
       );
 
       const status = await store.getStatus(now);
-      assert.equal(status.services.length, 4);
+      assert.equal(status.services.length, 5);
       assert.equal(status.services[0].state, "down");
       assert.equal(status.services[0].uptimePercent, 0);
       assert.equal(status.services[1].state, "up");
+      const mapsStatus = status.services.find((service) => service.id === "maps");
+      assert.ok(mapsStatus);
+      assert.equal(mapsStatus.name, "Карты");
+      assert.equal(mapsStatus.state, "up");
+      assert.equal(mapsStatus.uptimePercent, 100);
+      assert.equal(mapsStatus.latencyMs, 30);
 
       const staleStatus = await store.getStatus(now + 3 * 60_000 + 1);
       assert.equal(staleStatus.services[0].state, "unknown");
