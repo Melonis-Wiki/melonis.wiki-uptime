@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { createServer, type ServerResponse } from "node:http";
+import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { join } from "node:path";
 
 import { closeRedisClient } from "./lib/redis.js";
@@ -68,17 +68,36 @@ function sendJson(
   response.end(payload);
 }
 
+/**
+ * Path of an origin-form request target ("/path?query"), or null for anything
+ * else. Node's HTTP parser accepts targets such as "//[" that make the URL
+ * parser throw; that used to be an unhandled rejection that killed the process.
+ */
+function requestPathname(target: string | undefined): string | null {
+  if (!target || !target.startsWith("/") || target.startsWith("//")) return null;
+  try {
+    return new URL(target, "http://localhost").pathname;
+  } catch {
+    return null;
+  }
+}
+
 async function main(): Promise<void> {
   const hostname = "0.0.0.0";
   const port = Number(process.env.PORT) || 3000;
   const staticAssets = await loadStaticAssets();
   const stopScheduler = startMonitorScheduler();
-  const server = createServer(async (request, response) => {
+  const handle = async (request: IncomingMessage, response: ServerResponse) => {
     applySecurityHeaders(response);
-    const pathname = new URL(request.url ?? "/", "http://localhost").pathname;
 
     if (request.method !== "GET" && request.method !== "HEAD") {
       sendJson(response, 405, { error: "Method Not Allowed" }, { Allow: "GET, HEAD" });
+      return;
+    }
+
+    const pathname = requestPathname(request.url);
+    if (pathname === null) {
+      sendJson(response, 400, { error: "Bad Request" });
       return;
     }
 
@@ -116,6 +135,19 @@ async function main(): Promise<void> {
       "Cache-Control": asset.cacheControl,
     });
     response.end(request.method === "HEAD" ? undefined : asset.body);
+  };
+  const server = createServer((request, response) => {
+    // Every failure ends this one request; none may reach the process.
+    handle(request, response).catch((error: unknown) => {
+      console.error("[uptime] request failed", {
+        message: error instanceof Error ? error.message : String(error),
+      });
+      if (response.headersSent) {
+        response.destroy();
+      } else {
+        sendJson(response, 500, { error: "Internal Server Error" });
+      }
+    });
   });
 
   server.requestTimeout = 30_000;
